@@ -1,4 +1,4 @@
-package main.java.com.acs;
+package com.acs;
 
 public class Init {
     

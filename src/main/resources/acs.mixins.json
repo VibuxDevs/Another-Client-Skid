@@ -5,6 +5,9 @@
   "compatibilityLevel": "JAVA_21",
   "mixins": [],
   "client": [
+    "MinecraftClientMixin",
+    "KeyboardMixin",
+    "InGameHudMixin"
   ],
   "injectors": {
     "defaultRequire": 1
