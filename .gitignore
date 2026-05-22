@@ -1,3 +1,6 @@
-code.txt
+*.log
+*.txt
 e.ps1
 .gradle/
+build/
+run/

@@ -13,10 +13,11 @@ public class ModuleManager {
     private final Map<Module, List<Setting<?>>> settings = new HashMap<>();
 
     public ModuleManager() {
-        addModule(new com.acs.module.modules.KillAura());
-        addModule(new com.acs.module.modules.Sprint());
-        addModule(new com.acs.module.modules.Fullbright());
-        addModule(new com.acs.module.modules.ClickGuiModule());
+        addModule(new com.acs.module.modules.pvp.KillAura());
+        addModule(new com.acs.module.modules.pvp.CrystalAura());
+        addModule(new com.acs.module.modules.movement.Sprint());
+        addModule(new com.acs.module.modules.render.Fullbright());
+        addModule(new com.acs.module.modules.client.ClickGuiModule());
     }
 
     private void addModule(Module module) {

@@ -3,7 +3,7 @@ package com.acs.gui.clickgui;
 import com.acs.gui.hud.HudManager;
 import com.acs.gui.hud.HudComponent;
 import com.acs.module.Category;
-import com.acs.utils.FriendManager;
+import com.acs.manager.FriendManager;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
@@ -16,6 +16,7 @@ public class ClickGUI extends Screen {
     public static final ClickGUI INSTANCE = new ClickGUI();
     private final List<Frame> frames = new ArrayList<>();
     private final ParticleSystem particleSystem = new ParticleSystem(100);
+    private  final MinecraftClient mc = MinecraftClient.getInstance();
     private int currentPage = 0;
     private String searchText = "";
     private boolean searchFocused = false;
@@ -25,16 +26,19 @@ public class ClickGUI extends Screen {
     private boolean friendInputFocused = false;
     private String friendStatus = "";
 
-    public ClickGUI() {
-        super(Text.literal("ACS Client"));
-        frames.add(new Frame(Category.RENDER,   10,  35, 100, 14));
-        frames.add(new Frame(Category.PLAYER,  115,  35, 100, 14));
-        frames.add(new Frame(Category.COMBAT,  220,  35, 100, 14));
-        frames.add(new Frame(Category.MOVEMENT,325,  35, 100, 14));
-        frames.add(new Frame(Category.EXPLOITS,430,  35, 100, 14));
-        frames.add(new Frame(Category.MISC,    535,  35, 100, 14));
-        frames.add(new Frame(Category.WORLD,   640,  35, 100, 14));
-        frames.add(new Frame(Category.CRASH,   745,  35, 100, 14));
+
+public ClickGUI() {
+    super(Text.literal("ACS Client"));
+    frames.clear();
+    int x = mc.getWindow().getScaledWidth();
+        frames.add(new Frame(Category.RENDER,  1 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.PLAYER,  2 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.COMBAT,  3 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.MOVEMENT,4 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.EXPLOITS,5 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.MISC,    6 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.WORLD,   7 * x/8-100,  35, 100, 14));
+        frames.add(new Frame(Category.CLIENT,  8 * x/8-100,  35, 100, 14));
     }
 
     @Override

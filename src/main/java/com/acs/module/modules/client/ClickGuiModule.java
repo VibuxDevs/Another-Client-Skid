@@ -1,4 +1,4 @@
-package com.acs.module.modules;
+package com.acs.module.modules.client;
 
 import com.acs.gui.clickgui.ClickGUI;
 import com.acs.module.Category;
@@ -7,7 +7,7 @@ import org.lwjgl.glfw.GLFW;
 
 public class ClickGuiModule extends Module {
     public ClickGuiModule() {
-        super("ClickGUI", "Opens the Click GUI", Category.RENDER);
+        super("ClickGUI", "Opens the Click GUI", Category.CLIENT);
         setKey(GLFW.GLFW_KEY_RIGHT_SHIFT);
     }
 

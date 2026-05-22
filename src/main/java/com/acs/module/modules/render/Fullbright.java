@@ -1,4 +1,4 @@
-package com.acs.module.modules;
+package com.acs.module.modules.render;
 
 import com.acs.module.Category;
 import com.acs.module.Module;
@@ -43,7 +43,6 @@ public class Fullbright extends Module {
             field.setAccessible(true);
             field.set(gamma, value);
         } catch (Exception e) {
-            // Reflection failed, try setValue anyway
             mc.options.getGamma().setValue(value);
         }
     }

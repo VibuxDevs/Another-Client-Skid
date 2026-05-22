@@ -53,7 +53,6 @@ public class ModuleButton {
                 sY += h;
             }
 
-            // Bind row
             boolean bindHovered = isHoveredRow(mouseX, mouseY, sY, h);
             context.fill(x, sY, x + w, sY + h, bindListening ? 0xFF003300 : (bindHovered ? 0xFF1a1a1a : 0xFF080808));
             context.fill(x, sY, x + 2, sY + h, 0xFF004444);
@@ -96,7 +95,6 @@ public class ModuleButton {
                 sY += h;
             }
 
-            // Bind row click
             if (isHoveredRow(mouseX, mouseY, sY, h)) {
                 if (button == 0) {
                     bindListening = !bindListening;
