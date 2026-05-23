@@ -15,8 +15,19 @@ public class ModuleManager {
     public ModuleManager() {
         addModule(new com.acs.module.modules.pvp.KillAura());
         addModule(new com.acs.module.modules.pvp.CrystalAura());
+        addModule(new com.acs.module.modules.combat.AutoTotem());
+        addModule(new com.acs.module.modules.combat.AutoArmor());
         addModule(new com.acs.module.modules.movement.Sprint());
+        addModule(new com.acs.module.modules.movement.Step());
+        addModule(new com.acs.module.modules.movement.Velocity());
+        addModule(new com.acs.module.modules.movement.Flight());
         addModule(new com.acs.module.modules.render.Fullbright());
+        addModule(new com.acs.module.modules.render.ESP());
+        addModule(new com.acs.module.modules.render.Freecam());
+        addModule(new com.acs.module.modules.render.XRay());
+        addModule(new com.acs.module.modules.world.Scaffold());
+        addModule(new com.acs.module.modules.player.FastPlace());
+        addModule(new com.acs.module.modules.player.NoFall());
         addModule(new com.acs.module.modules.client.ClickGuiModule());
     }
 

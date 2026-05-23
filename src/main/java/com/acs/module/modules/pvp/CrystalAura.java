@@ -242,7 +242,7 @@ public class CrystalAura extends Module {
                 position,
                 false);
 
-        mc.getNetworkHandler().sendPacket(new PlayerInteractBlockC2SPacket(hand, hitResult, 0));
+        mc.interactionManager.interactBlock(mc.player, hand, hitResult);
         mc.player.swingHand(hand);
     }
 
