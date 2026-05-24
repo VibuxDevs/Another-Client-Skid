@@ -3,6 +3,7 @@ package com.acs.module.modules.render;
 import com.acs.module.Category;
 import com.acs.module.Module;
 import net.minecraft.client.option.SimpleOption;
+import com.acs.mixin.SimpleOptionAccessor;
 
 import java.lang.reflect.Field;
 
@@ -35,15 +36,12 @@ public class Fullbright extends Module {
         }
     }
 
-    @SuppressWarnings("unchecked")
     private void setGamma(double value) {
         try {
-            SimpleOption<Double> gamma = mc.options.getGamma();
-            Field field = SimpleOption.class.getDeclaredField("value");
-            field.setAccessible(true);
-            field.set(gamma, value);
+            SimpleOptionAccessor accessor = (SimpleOptionAccessor) (Object) mc.options.getGamma();
+            accessor.setValueDirect(value);
         } catch (Exception e) {
-            mc.options.getGamma().setValue(value);
+            e.printStackTrace();
         }
     }
 }

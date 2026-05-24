@@ -4,6 +4,7 @@ import com.acs.gui.hud.components.ArrayListHud;
 import com.acs.gui.hud.components.Watermark;
 import com.acs.gui.hud.components.Welcomer;
 import com.acs.gui.hud.components.Cps;
+import com.acs.gui.hud.components.Bpm;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ public class HudManager {
         components.add(new Watermark(5, 5));
         components.add(new ArrayListHud(5, 5));
         components.add(new Cps(5, -(y) + 5));
+        components.add(new Bpm(5, -(y) + 15));
         components.add(new Welcomer(0, 5));
     }
 

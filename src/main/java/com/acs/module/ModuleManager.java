@@ -52,7 +52,7 @@ public class ModuleManager {
 
     public Module getModuleByName(String name) {
         return modules.stream()
-            .filter(m -> m.getName().equalsIgnoreCase(name))
-            .findFirst().orElse(null);
+                .filter(m -> m.getName().equalsIgnoreCase(name))
+                .findFirst().orElse(null);
     }
 }

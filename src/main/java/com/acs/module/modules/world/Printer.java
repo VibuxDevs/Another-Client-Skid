@@ -20,7 +20,7 @@ public class Printer extends Module {
     private final NumberSetting range = new NumberSetting("Range", 4.0, 1.0, 6.0, 0.1);
     private final NumberSetting delay = new NumberSetting("Delay", 1.0, 0.0, 10.0, 1.0);
     private final NumberSetting blocksPerTick = new NumberSetting("Blocks/Tick", 1.0, 1.0, 10.0, 1.0);
-    
+
     private int delayTimer = 0;
 
     public Printer() {
@@ -32,7 +32,8 @@ public class Printer extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player == null || mc.world == null) return;
+        if (mc.player == null || mc.world == null)
+            return;
 
         if (delayTimer > 0) {
             delayTimer--;
@@ -41,7 +42,8 @@ public class Printer extends Module {
 
         try {
             WorldSchematic schematicWorld = SchematicWorldHandler.getSchematicWorld();
-            if (schematicWorld == null) return;
+            if (schematicWorld == null)
+                return;
 
             int r = range.getValue().intValue();
             BlockPos playerPos = mc.player.getBlockPos();
@@ -59,17 +61,20 @@ public class Printer extends Module {
                         }
 
                         BlockPos pos = playerPos.add(x, y, z);
-                        
+
                         if (mc.player.squaredDistanceTo(Vec3d.ofCenter(pos)) > range.getValue() * range.getValue()) {
                             continue;
                         }
 
                         BlockState expectedState = schematicWorld.getBlockState(pos);
-                        if (expectedState == null || expectedState.isAir()) continue;
+                        if (expectedState == null || expectedState.isAir())
+                            continue;
 
                         BlockState currentState = mc.world.getBlockState(pos);
-                        if (currentState.getBlock() == expectedState.getBlock()) continue;
-                        if (!currentState.isReplaceable()) continue;
+                        if (currentState.getBlock() == expectedState.getBlock())
+                            continue;
+                        if (!currentState.isReplaceable())
+                            continue;
 
                         int slot = findBlockInHotbar(expectedState.getBlock());
                         if (slot != -1) {
@@ -79,7 +84,7 @@ public class Printer extends Module {
                     }
                 }
             }
-            
+
             if (placedThisTick > 0 && delay.getValue().intValue() > 0) {
                 delayTimer = delay.getValue().intValue();
             }
@@ -89,19 +94,21 @@ public class Printer extends Module {
     }
 
     private void placeBlock(BlockPos pos, int slot) {
-        if (mc.interactionManager == null || mc.player == null) return;
-        
+        if (mc.interactionManager == null || mc.player == null)
+            return;
+
         int oldSlot = mc.player.getInventory().selectedSlot;
         if (oldSlot != slot) {
             mc.player.getInventory().selectedSlot = slot;
             if (mc.getNetworkHandler() != null) {
-                mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(slot));
+                mc.getNetworkHandler()
+                        .sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(slot));
             }
         }
 
         Direction placeDir = Direction.UP;
         BlockPos placePos = pos;
-        
+
         for (Direction dir : Direction.values()) {
             BlockPos neighbor = pos.offset(dir);
             if (!mc.world.getBlockState(neighbor).isReplaceable()) {
@@ -111,14 +118,16 @@ public class Printer extends Module {
             }
         }
 
-        BlockHitResult hitResult = new BlockHitResult(Vec3d.ofCenter(placePos).add(Vec3d.of(placeDir.getVector()).multiply(0.5)), placeDir, placePos, false);
+        BlockHitResult hitResult = new BlockHitResult(
+                Vec3d.ofCenter(placePos).add(Vec3d.of(placeDir.getVector()).multiply(0.5)), placeDir, placePos, false);
         mc.interactionManager.interactBlock(mc.player, Hand.MAIN_HAND, hitResult);
         mc.player.swingHand(Hand.MAIN_HAND);
-        
+
         if (oldSlot != slot) {
             mc.player.getInventory().selectedSlot = oldSlot;
             if (mc.getNetworkHandler() != null) {
-                mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(oldSlot));
+                mc.getNetworkHandler()
+                        .sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(oldSlot));
             }
         }
     }

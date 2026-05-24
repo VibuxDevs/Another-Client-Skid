@@ -14,7 +14,9 @@
     "ClientConnectionMixin",
     "ClientPlayNetworkHandlerMixin",
     "PlayerMoveC2SPacketAccessor",
-    "ExplosionS2CPacketAccessor"
+    "ExplosionS2CPacketAccessor",
+    "LivingEntityMixin",
+    "SimpleOptionAccessor"
   ],
   "injectors": {
     "defaultRequire": 1
