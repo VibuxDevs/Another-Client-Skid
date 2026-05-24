@@ -250,6 +250,9 @@ public class CrystalAura extends Module {
         for (int i = 0; i < 9; i++) {
             if (mc.player.getInventory().getStack(i).getItem() == Items.END_CRYSTAL) {
                 mc.player.getInventory().selectedSlot = i;
+                if (mc.getNetworkHandler() != null) {
+                    mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(i));
+                }
                 return;
             }
         }

@@ -26,6 +26,7 @@ public class ModuleManager {
         addModule(new com.acs.module.modules.render.Freecam());
         addModule(new com.acs.module.modules.render.XRay());
         addModule(new com.acs.module.modules.world.Scaffold());
+        addModule(new com.acs.module.modules.world.Printer());
         addModule(new com.acs.module.modules.player.FastPlace());
         addModule(new com.acs.module.modules.player.NoFall());
         addModule(new com.acs.module.modules.client.ClickGuiModule());

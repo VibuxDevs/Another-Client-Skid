@@ -46,16 +46,10 @@ public class ClientPlayNetworkHandlerMixin {
             double horizontal = velocity.getHorizontal();
             double vertical = velocity.getVertical();
             
-            if (horizontal == 0.0 && vertical == 0.0) {
-                // To properly cancel just the knockback but keep the explosion, we would modify the packet knockback fields.
-                // For simplicity, if we want 0 knockback from explosions, we can cancel the player velocity update part in the handler.
-                // But ExplosionS2CPacket handling adds velocity. Since we can't easily overwrite just the velocity part without redirect, 
-                // we will let Entity.addVelocity mixin handle explosion knockback since explosions call player.addVelocity on the client.
-                // Wait, explosion packet has getPlayerVelocityX() which gets added. 
-                // Let's rely on EntityMixin for explosions or do a Redirect.
-                // For a quick fix, let's just let the entity mixin catch it if it does, 
-                // but actually the handler sets player.setVelocity(player.getVelocity().add(packet.getPlayerVelocityX(), ...))
-            }
+            ExplosionS2CPacketAccessor accessor = (ExplosionS2CPacketAccessor) packet;
+            accessor.setPlayerVelocityX((float) (packet.getPlayerVelocityX() * horizontal));
+            accessor.setPlayerVelocityY((float) (packet.getPlayerVelocityY() * vertical));
+            accessor.setPlayerVelocityZ((float) (packet.getPlayerVelocityZ() * horizontal));
         }
     }
 }

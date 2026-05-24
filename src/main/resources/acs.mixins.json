@@ -13,7 +13,8 @@
     "BlockMixin",
     "ClientConnectionMixin",
     "ClientPlayNetworkHandlerMixin",
-    "PlayerMoveC2SPacketAccessor"
+    "PlayerMoveC2SPacketAccessor",
+    "ExplosionS2CPacketAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

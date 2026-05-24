@@ -72,11 +72,17 @@ public class Scaffold extends Module {
 
             if (mc.world.getBlockState(targetPos).isReplaceable()) {
                 int oldSlot = mc.player.getInventory().selectedSlot;
-                mc.player.getInventory().selectedSlot = blockSlot;
+                if (oldSlot != blockSlot) {
+                    mc.player.getInventory().selectedSlot = blockSlot;
+                    mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(blockSlot));
+                }
 
                 placeBlock(targetPos);
 
-                mc.player.getInventory().selectedSlot = oldSlot;
+                if (oldSlot != blockSlot) {
+                    mc.player.getInventory().selectedSlot = oldSlot;
+                    mc.getNetworkHandler().sendPacket(new net.minecraft.network.packet.c2s.play.UpdateSelectedSlotC2SPacket(oldSlot));
+                }
                 // If we placed a block, don't place more in the same tick unless you want fast extend
                 break;
             }
