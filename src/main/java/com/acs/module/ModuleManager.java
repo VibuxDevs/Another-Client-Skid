@@ -29,6 +29,7 @@ public class ModuleManager {
         addModule(new com.acs.module.modules.world.Printer());
         addModule(new com.acs.module.modules.player.FastPlace());
         addModule(new com.acs.module.modules.player.NoFall());
+        addModule(new com.acs.module.modules.movement.ElytraFly());
         addModule(new com.acs.module.modules.client.ClickGuiModule());
     }
 
