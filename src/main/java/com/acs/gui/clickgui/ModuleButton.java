@@ -10,6 +10,10 @@ import net.minecraft.client.gui.DrawContext;
 import org.lwjgl.glfw.GLFW;
 
 public class ModuleButton {
+    public static NumberSetting activeSlider = null;
+    public static int sliderX = 0;
+    public static int sliderWidth = 0;
+
     private final Module module;
     private final Frame parent;
     private int offset;
@@ -44,10 +48,31 @@ public class ModuleButton {
         if (extended) {
             int sY = y + h;
             for (Setting<?> setting : module.getSettings()) {
+                if (!setting.isVisible()) continue;
                 boolean sHovered = isHoveredRow(mouseX, mouseY, sY, h);
                 context.fill(x, sY, x + w, sY + h, sHovered ? 0xFF1a1a1a : 0xFF080808);
+                
+                if (setting instanceof NumberSetting ns) {
+                    double percent = (ns.getValue() - ns.getMin()) / (ns.getMax() - ns.getMin());
+                    if (percent < 0) percent = 0;
+                    if (percent > 1) percent = 1;
+                    int sliderRight = x + 2 + (int)((w - 4) * percent);
+                    context.fill(x + 2, sY + 2, sliderRight, sY + h - 2, 0x3500FFFF);
+                    context.fill(x + 2, sY + h - 2, sliderRight, sY + h, 0xFF00FFFF);
+                }
+
                 context.fill(x, sY, x + 2, sY + h, 0xFF440000);
+                
                 String valStr = setting.getValue().toString();
+                if (setting instanceof NumberSetting ns) {
+                    valStr = String.format("%.2f", ns.getValue());
+                    if (valStr.endsWith(".00")) {
+                        valStr = valStr.substring(0, valStr.length() - 3);
+                    } else if (valStr.contains(".") && valStr.endsWith("0")) {
+                        valStr = valStr.substring(0, valStr.length() - 1);
+                    }
+                }
+                
                 context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, setting.getName(), x + 6, sY + 2, 0xFF888888);
                 context.drawTextWithShadow(MinecraftClient.getInstance().textRenderer, valStr, x + w - MinecraftClient.getInstance().textRenderer.getWidth(valStr) - 4, sY + 2, 0xFFFF6666);
                 sY += h;
@@ -67,6 +92,7 @@ public class ModuleButton {
         int x = parent.getX();
         int y = parent.getY() + offset;
         int h = parent.getHeight();
+        int w = parent.getWidth();
 
         if (isHoveredRow(mouseX, mouseY, y, h)) {
             if (button == 0) { module.toggle(); return true; }
@@ -76,19 +102,25 @@ public class ModuleButton {
         if (extended) {
             int sY = y + h;
             for (Setting<?> setting : module.getSettings()) {
+                if (!setting.isVisible()) continue;
                 if (isHoveredRow(mouseX, mouseY, sY, h)) {
                     if (button == 0) {
                         if (setting instanceof BooleanSetting) ((BooleanSetting) setting).toggle();
                         else if (setting instanceof ModeSetting) ((ModeSetting) setting).cycle();
                         else if (setting instanceof NumberSetting ns) {
-                            double newVal = ns.getValue() + ns.getIncrement();
-                            if (newVal > ns.getMax()) newVal = ns.getMin();
-                            ns.setValue(newVal);
+                            activeSlider = ns;
+                            sliderX = x;
+                            sliderWidth = w;
+                            
+                            double percent = (mouseX - x) / (double) w;
+                            if (percent < 0) percent = 0;
+                            if (percent > 1) percent = 1;
+                            double val = ns.getMin() + percent * (ns.getMax() - ns.getMin());
+                            val = Math.round(val / ns.getIncrement()) * ns.getIncrement();
+                            if (val < ns.getMin()) val = ns.getMin();
+                            if (val > ns.getMax()) val = ns.getMax();
+                            ns.setValue(val);
                         }
-                    } else if (button == 1 && setting instanceof NumberSetting ns) {
-                        double newVal = ns.getValue() - ns.getIncrement();
-                        if (newVal < ns.getMin()) newVal = ns.getMax();
-                        ns.setValue(newVal);
                     }
                     return true;
                 }
@@ -126,7 +158,11 @@ public class ModuleButton {
 
     public int getHeight() {
         if (!extended) return parent.getHeight();
-        return parent.getHeight() * (1 + module.getSettings().size() + 1);
+        int visibleSettings = 0;
+        for (Setting<?> setting : module.getSettings()) {
+            if (setting.isVisible()) visibleSettings++;
+        }
+        return parent.getHeight() * (1 + visibleSettings + 1);
     }
 
     private boolean isHoveredRow(double mouseX, double mouseY, int rowY, int rowH) {

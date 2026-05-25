@@ -22,6 +22,8 @@ public class ElytraFly extends Module {
 
     // Bounce Mode Settings
     private final NumberSetting bounceSpeed = new NumberSetting("Bounce Speed", 1.5, 0.5, 5.0, 0.1);
+    private final NumberSetting bouncePitch = new NumberSetting("Bounce Pitch", 35.0, -90.0, 90.0, 1.0);
+    private final BooleanSetting spoofPitch = new BooleanSetting("Spoof Pitch", true);
 
     // Infinite Durability
     private final BooleanSetting infiniteDurability = new BooleanSetting("Infinite Durability", true);
@@ -29,11 +31,21 @@ public class ElytraFly extends Module {
 
     public ElytraFly() {
         super("ElytraFly", "Grants full control or bouncing mechanics over Elytra flight", Category.MOVEMENT);
+        
+        speed.setVisible(() -> mode.getValue().equals("Control"));
+        fallSpeed.setVisible(() -> mode.getValue().equals("Control"));
+        autoFly.setVisible(() -> mode.getValue().equals("Control"));
+        bounceSpeed.setVisible(() -> mode.getValue().equals("Bounce"));
+        bouncePitch.setVisible(() -> mode.getValue().equals("Bounce"));
+        spoofPitch.setVisible(() -> mode.getValue().equals("Bounce"));
+
         addSetting(mode);
         addSetting(speed);
         addSetting(fallSpeed);
         addSetting(autoFly);
         addSetting(bounceSpeed);
+        addSetting(bouncePitch);
+        addSetting(spoofPitch);
         addSetting(infiniteDurability);
     }
 
@@ -59,14 +71,14 @@ public class ElytraFly extends Module {
         if (mode.getValue().equals("Bounce")) {
             if (!mc.player.getInventory().getArmorStack(2).getItem().toString().contains("elytra")) return;
 
+            // Real Elytra hopping works by sending a START_FALL_FLYING packet immediately on jump/touchdown.
+            // When on the ground, jump automatically. When in air, immediately deploy the elytra.
             if (mc.player.isOnGround()) {
                 mc.player.jump();
-            } else {
-                if (!mc.player.isFallFlying()) {
-                    mc.player.startFallFlying();
-                    if (mc.getNetworkHandler() != null) {
-                        mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
-                    }
+            } else if (mc.player.getVelocity().y < 0 && !mc.player.isFallFlying()) {
+                mc.player.startFallFlying();
+                if (mc.getNetworkHandler() != null) {
+                    mc.getNetworkHandler().sendPacket(new ClientCommandC2SPacket(mc.player, ClientCommandC2SPacket.Mode.START_FALL_FLYING));
                 }
             }
         } else {
@@ -122,6 +134,10 @@ public class ElytraFly extends Module {
     }
 
     private void handleBounceMode(ClientPlayerEntity player) {
+        if (spoofPitch.getValue() && player.isFallFlying()) {
+            player.setPitch(bouncePitch.getValue().floatValue());
+        }
+
         double currentSpeed = bounceSpeed.getValue();
         Vec3d forward = Vec3d.fromPolar(0, player.getYaw());
         Vec3d right = Vec3d.fromPolar(0, player.getYaw() + 90);
@@ -155,8 +171,19 @@ public class ElytraFly extends Module {
             velZ = moveDir.z * currentSpeed;
         }
 
-        double velY = player.getVelocity().y - 0.08;
-        if (velY < -3.0) velY = -3.0;
+        // To maintain the e-bounce speed without fireworks, we must preserve horizontal velocity.
+        // If we're flying, we bypass downward gravity to keep ourselves aerodynamic until touchdown,
+        // preventing the vanilla drag from kicking in.
+        double velY = player.getVelocity().y;
+        if (player.isFallFlying()) {
+            // Apply slight downward glide slope to make the e-bounce look legitimate to server anti-cheats,
+            // while preserving forward speed vectors.
+            velY = -0.01;
+        } else {
+            // Standard falling physics
+            velY -= 0.08;
+            if (velY < -3.0) velY = -3.0;
+        }
 
         player.setVelocity(velX, velY, velZ);
         player.move(net.minecraft.entity.MovementType.SELF, player.getVelocity());

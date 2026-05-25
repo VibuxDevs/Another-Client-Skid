@@ -70,6 +70,21 @@ public ClickGUI() {
         renderTab(context, "Settings", centerX + 80, 5, currentPage == 3);
 
         if (currentPage == 0) {
+            if (ModuleButton.activeSlider != null) {
+                if (org.lwjgl.glfw.GLFW.glfwGetMouseButton(mc.getWindow().getHandle(), org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT) == org.lwjgl.glfw.GLFW.GLFW_RELEASE) {
+                    ModuleButton.activeSlider = null;
+                } else {
+                    com.acs.settings.NumberSetting ns = ModuleButton.activeSlider;
+                    double percent = (mouseX - ModuleButton.sliderX) / (double) ModuleButton.sliderWidth;
+                    if (percent < 0) percent = 0;
+                    if (percent > 1) percent = 1;
+                    double val = ns.getMin() + percent * (ns.getMax() - ns.getMin());
+                    val = Math.round(val / ns.getIncrement()) * ns.getIncrement();
+                    if (val < ns.getMin()) val = ns.getMin();
+                    if (val > ns.getMax()) val = ns.getMax();
+                    ns.setValue(val);
+                }
+            }
             for (Frame frame : frames) {
                 frame.render(context, mouseX, mouseY, delta, searchText);
             }
