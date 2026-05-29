@@ -39,8 +39,13 @@ public class ClientPlayNetworkHandlerMixin {
         }
     }
 
-    @Inject(method = "onExplosion", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "onExplosion", at = @At("HEAD"))
     public void onExplosion(ExplosionS2CPacket packet, CallbackInfo ci) {
+        com.acs.module.modules.exploits.CoordLogger coordLogger = (com.acs.module.modules.exploits.CoordLogger) ModuleManager.INSTANCE.getModuleByName("CoordLogger");
+        if (coordLogger != null) {
+            coordLogger.handleExplosion(packet.getX(), packet.getY(), packet.getZ());
+        }
+
         Velocity velocity = (Velocity) ModuleManager.INSTANCE.getModuleByName("Velocity");
         if (velocity != null && velocity.isEnabled() && velocity.handleExplosions()) {
             double horizontal = velocity.getHorizontal();
@@ -50,6 +55,22 @@ public class ClientPlayNetworkHandlerMixin {
             accessor.setPlayerVelocityX((float) (packet.getPlayerVelocityX() * horizontal));
             accessor.setPlayerVelocityY((float) (packet.getPlayerVelocityY() * vertical));
             accessor.setPlayerVelocityZ((float) (packet.getPlayerVelocityZ() * horizontal));
+        }
+    }
+
+    @Inject(method = "onPlaySound", at = @At("HEAD"))
+    public void onPlaySound(net.minecraft.network.packet.s2c.play.PlaySoundS2CPacket packet, CallbackInfo ci) {
+        com.acs.module.modules.exploits.CoordLogger coordLogger = (com.acs.module.modules.exploits.CoordLogger) ModuleManager.INSTANCE.getModuleByName("CoordLogger");
+        if (coordLogger != null) {
+            coordLogger.handleSound(packet.getSound(), packet.getX(), packet.getY(), packet.getZ());
+        }
+    }
+
+    @Inject(method = "onWorldEvent", at = @At("HEAD"))
+    public void onWorldEvent(net.minecraft.network.packet.s2c.play.WorldEventS2CPacket packet, CallbackInfo ci) {
+        com.acs.module.modules.exploits.CoordLogger coordLogger = (com.acs.module.modules.exploits.CoordLogger) ModuleManager.INSTANCE.getModuleByName("CoordLogger");
+        if (coordLogger != null) {
+            coordLogger.handleWorldEvent(packet.getEventId(), packet.getPos());
         }
     }
 }

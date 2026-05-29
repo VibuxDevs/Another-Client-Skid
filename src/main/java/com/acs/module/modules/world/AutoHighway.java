@@ -22,6 +22,7 @@ public class AutoHighway extends Module {
     private final BooleanSetting autoMine = new BooleanSetting("Auto Mine", true);
 
     private int startY;
+    private Direction startDir = null;
 
     public AutoHighway() {
         super("AutoHighway", "Automatically builds and clears obsidian highways along axes", Category.WORLD);
@@ -39,6 +40,10 @@ public class AutoHighway extends Module {
     public void onEnable() {
         if (mc.player != null) {
             startY = mc.player.getBlockPos().getY();
+            startDir = mc.player.getMovementDirection();
+            if (startDir == Direction.UP || startDir == Direction.DOWN) {
+                startDir = Direction.NORTH;
+            }
         }
     }
 
@@ -51,17 +56,15 @@ public class AutoHighway extends Module {
 
     @Override
     public void onTick() {
-        if (mc.player == null || mc.world == null) return;
+        if (mc.player == null || mc.world == null || startDir == null) return;
 
         if (autoWalk.getValue()) {
+            mc.player.setYaw(startDir.asRotation());
             mc.options.forwardKey.setPressed(true);
         }
 
         BlockPos playerPos = mc.player.getBlockPos();
-        Direction dir = mc.player.getMovementDirection();
-
-        // If we are looking/moving diagonally, lock onto the dominant cardinal direction
-        if (dir == Direction.UP || dir == Direction.DOWN) return;
+        Direction dir = startDir;
 
         int dx = 0;
         int dz = 0;
@@ -78,7 +81,6 @@ public class AutoHighway extends Module {
             maxOffset = w / 2 - 1;
         }
 
-        // We check and build 1 block ahead in the direction of movement to ensure we don't fall off
         int checkAhead = 1;
         
         for (int i = minOffset; i <= maxOffset; i++) {
@@ -87,9 +89,15 @@ public class AutoHighway extends Module {
 
             BlockPos buildPos = new BlockPos(targetX, startY - 1, targetZ);
 
-            // Build the floor
-            if (mc.world.getBlockState(buildPos).isReplaceable()) {
-                tryPlaceObsidian(buildPos);
+            // Replace floor if it is not Obsidian
+            net.minecraft.block.BlockState floorState = mc.world.getBlockState(buildPos);
+            if (floorState.getBlock() != Blocks.OBSIDIAN) {
+                if (autoMine.getValue()) {
+                    mineBlockIfSolid(buildPos);
+                }
+                if (mc.world.getBlockState(buildPos).isReplaceable()) {
+                    tryPlaceObsidian(buildPos);
+                }
             }
 
             // Build walls or clear the walking path

@@ -32,6 +32,10 @@ public class ModuleManager {
         addModule(new com.acs.module.modules.player.NoFall());
         addModule(new com.acs.module.modules.movement.ElytraFly());
         addModule(new com.acs.module.modules.client.ClickGuiModule());
+        addModule(new com.acs.module.modules.exploits.ReverseGhostBlock());
+        addModule(new com.acs.module.modules.exploits.CoordLogger());
+        addModule(new com.acs.module.modules.exploits.ClickTP());
+        addModule(new com.acs.module.modules.exploits.Blink());
     }
 
     private void addModule(Module module) {

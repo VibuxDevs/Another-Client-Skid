@@ -24,10 +24,41 @@ public class CommandManager {
             case "config", "cfg" -> handleConfig(args);
             case "toggle", "t"   -> handleToggle(args);
             case "bind", "b"     -> handleBind(args);
+            case "tp"            -> handleTp(args);
             case "help", "h"     -> handleHelp();
             default -> chat("§cUnknown command. Use §f.help");
         }
         return true;
+    }
+
+    private void handleTp(String[] args) {
+        if (args.length < 3) {
+            chat("§cUsage: .tp <x> <y> <z>");
+            return;
+        }
+        try {
+            double x = resolveCoord(args[0], MinecraftClient.getInstance().player.getX());
+            double y = resolveCoord(args[1], MinecraftClient.getInstance().player.getY());
+            double z = resolveCoord(args[2], MinecraftClient.getInstance().player.getZ());
+            MinecraftClient mc = MinecraftClient.getInstance();
+            if (mc.player != null) {
+                mc.player.setPosition(x, y, z);
+                mc.player.networkHandler.sendPacket(new net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket.PositionAndOnGround(
+                    x, y, z, mc.player.isOnGround()
+                ));
+                chat(String.format("§aTeleported to §f%.1f, %.1f, %.1f", x, y, z));
+            }
+        } catch (NumberFormatException e) {
+            chat("§cInvalid coordinates.");
+        }
+    }
+
+    private double resolveCoord(String arg, double current) {
+        if (arg.startsWith("~")) {
+            if (arg.length() == 1) return current;
+            return current + Double.parseDouble(arg.substring(1));
+        }
+        return Double.parseDouble(arg);
     }
 
     private void handleConfig(String[] args) {
@@ -83,6 +114,7 @@ public class CommandManager {
         chat("§f.config <save|load|list> [name] §7- Manage configs");
         chat("§f.toggle <module> §7- Toggle a module");
         chat("§f.bind <module> <key|none> §7- Set a keybind");
+        chat("§f.tp <x> <y> <z> §7- Teleport to coordinates (relative ~ supported)");
         chat("§f.help §7- Show this message");
     }
 
