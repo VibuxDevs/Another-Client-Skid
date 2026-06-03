@@ -1,12 +1,7 @@
 package com.acs.mixin;
 
-<<<<<<< Updated upstream
 import com.acs.module.ModuleManager;
 import com.acs.module.modules.movement.Velocity;
-=======
-import com.acs.module.Module;
-import com.acs.module.ModuleManager;
->>>>>>> Stashed changes
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
@@ -18,7 +13,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(ClientPlayNetworkHandler.class)
 public class ClientPlayNetworkHandlerMixin {
-<<<<<<< Updated upstream
 
     @Inject(method = "onEntityVelocityUpdate", at = @At("HEAD"), cancellable = true)
     public void onEntityVelocityUpdate(EntityVelocityUpdateS2CPacket packet, CallbackInfo ci) {
@@ -33,28 +27,16 @@ public class ClientPlayNetworkHandlerMixin {
                 if (horizontal == 0.0 && vertical == 0.0) {
                     ci.cancel();
                 } else {
-                    // It's a bit tricky to modify S2C packet fields directly since they might not have setters.
-                    // The easiest way is to cancel the packet and apply the scaled velocity manually.
                     double vx = (packet.getVelocityX() / 8000.0D) * horizontal;
                     double vy = (packet.getVelocityY() / 8000.0D) * vertical;
                     double vz = (packet.getVelocityZ() / 8000.0D) * horizontal;
                     MinecraftClient.getInstance().player.setVelocity(vx, vy, vz);
                     ci.cancel();
                 }
-=======
-    @Inject(method = "onEntityVelocityUpdate", at = @At("HEAD"), cancellable = true)
-    private void onEntityVelocityUpdate(EntityVelocityUpdateS2CPacket packet, CallbackInfo ci) {
-        MinecraftClient mc = MinecraftClient.getInstance();
-        if (mc.player != null && packet.getId() == mc.player.getId()) {
-            Module velocity = ModuleManager.INSTANCE.getModuleByName("Velocity");
-            if (velocity != null && velocity.isEnabled()) {
-                ci.cancel();
->>>>>>> Stashed changes
             }
         }
     }
 
-<<<<<<< Updated upstream
     @Inject(method = "onExplosion", at = @At("HEAD"))
     public void onExplosion(ExplosionS2CPacket packet, CallbackInfo ci) {
         com.acs.module.modules.exploits.CoordLogger coordLogger = (com.acs.module.modules.exploits.CoordLogger) ModuleManager.INSTANCE.getModuleByName("CoordLogger");
@@ -87,13 +69,6 @@ public class ClientPlayNetworkHandlerMixin {
         com.acs.module.modules.exploits.CoordLogger coordLogger = (com.acs.module.modules.exploits.CoordLogger) ModuleManager.INSTANCE.getModuleByName("CoordLogger");
         if (coordLogger != null) {
             coordLogger.handleWorldEvent(packet.getEventId(), packet.getPos());
-=======
-    @Inject(method = "onExplosion", at = @At("HEAD"), cancellable = true)
-    private void onExplosion(ExplosionS2CPacket packet, CallbackInfo ci) {
-        Module velocity = ModuleManager.INSTANCE.getModuleByName("Velocity");
-        if (velocity != null && velocity.isEnabled()) {
-            ci.cancel();
->>>>>>> Stashed changes
         }
     }
 }

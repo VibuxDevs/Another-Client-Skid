@@ -13,7 +13,6 @@ public class ModuleManager {
     private final Map<Module, List<Setting<?>>> settings = new HashMap<>();
 
     public ModuleManager() {
-<<<<<<< Updated upstream
         addModule(new com.acs.module.modules.pvp.KillAura());
         addModule(new com.acs.module.modules.pvp.CrystalAura());
         addModule(new com.acs.module.modules.combat.AutoTotem());
@@ -37,24 +36,13 @@ public class ModuleManager {
         addModule(new com.acs.module.modules.exploits.CoordLogger());
         addModule(new com.acs.module.modules.exploits.ClickTP());
         addModule(new com.acs.module.modules.exploits.Blink());
-=======
-        addModule(new com.acs.module.modules.KillAura());
-        addModule(new com.acs.module.modules.Sprint());
-        addModule(new com.acs.module.modules.Fullbright());
-        addModule(new com.acs.module.modules.ClickGuiModule());
-        addModule(new com.acs.module.modules.Fly());
-        addModule(new com.acs.module.modules.NoFall());
-        addModule(new com.acs.module.modules.FastPlace());
-        addModule(new com.acs.module.modules.AutoTotem());
-        addModule(new com.acs.module.modules.Speed());
-        addModule(new com.acs.module.modules.Step());
-        addModule(new com.acs.module.modules.Velocity());
-        addModule(new com.acs.module.modules.TriggerBot());
-        addModule(new com.acs.module.modules.MaceKill());
-        addModule(new com.acs.module.modules.MaceBot());
-        addModule(new com.acs.module.modules.BoatFly());
-        addModule(new com.acs.module.modules.BoatPhase());
->>>>>>> Stashed changes
+
+        // Custom added modules
+        addModule(new com.acs.module.modules.pvp.TriggerBot());
+        addModule(new com.acs.module.modules.exploits.MaceKill());
+        addModule(new com.acs.module.modules.exploits.MaceBot());
+        addModule(new com.acs.module.modules.movement.BoatFly());
+        addModule(new com.acs.module.modules.exploits.BoatPhase());
     }
 
     private void addModule(Module module) {

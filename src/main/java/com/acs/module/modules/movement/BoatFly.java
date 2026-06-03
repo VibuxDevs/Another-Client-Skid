@@ -1,4 +1,4 @@
-package com.acs.module.modules;
+package com.acs.module.modules.movement;
 
 import com.acs.module.Category;
 import com.acs.module.Module;

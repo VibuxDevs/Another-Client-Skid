@@ -1,2 +1,3 @@
 v1	named	intermediary
+FIELD	com/acs/mixin/ChatScreenMixin	Lnet/minecraft/client/gui/widget/TextFieldWidget;	chatField	field_2382
 FIELD	com/acs/mixin/MinecraftClientMixin	I	itemUseCooldown	field_1752

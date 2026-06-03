@@ -1,11 +1,34 @@
 {
   "mappings": {
+    "com/acs/mixin/AbstractBlockMixin": {
+      "getAmbientOcclusionLightLevel": "Lnet/minecraft/class_4970;method_9575(Lnet/minecraft/class_2680;Lnet/minecraft/class_1922;Lnet/minecraft/class_2338;)F"
+    },
+    "com/acs/mixin/BlockMixin": {
+      "shouldDrawSide": "Lnet/minecraft/class_2248;method_9607(Lnet/minecraft/class_2680;Lnet/minecraft/class_1922;Lnet/minecraft/class_2338;Lnet/minecraft/class_2350;Lnet/minecraft/class_2338;)Z"
+    },
+    "com/acs/mixin/ChatScreenMixin": {
+      "keyPressed": "Lnet/minecraft/class_408;method_25404(III)Z"
+    },
+    "com/acs/mixin/ClientConnectionMixin": {
+      "send(Lnet/minecraft/network/packet/Packet;)V": "Lnet/minecraft/class_2535;method_10743(Lnet/minecraft/class_2596;)V"
+    },
     "com/acs/mixin/ClientPlayNetworkHandlerMixin": {
       "onEntityVelocityUpdate": "Lnet/minecraft/class_634;method_11132(Lnet/minecraft/class_2743;)V",
-      "onExplosion": "Lnet/minecraft/class_634;method_11124(Lnet/minecraft/class_2664;)V"
+      "onExplosion": "Lnet/minecraft/class_634;method_11124(Lnet/minecraft/class_2664;)V",
+      "onPlaySound": "Lnet/minecraft/class_634;method_11146(Lnet/minecraft/class_2767;)V",
+      "onWorldEvent": "Lnet/minecraft/class_634;method_11098(Lnet/minecraft/class_2673;)V"
     },
     "com/acs/mixin/ClientPlayerInteractionManagerMixin": {
       "attackEntity": "Lnet/minecraft/class_636;method_2918(Lnet/minecraft/class_1657;Lnet/minecraft/class_1297;)V"
+    },
+    "com/acs/mixin/EntityMixin": {
+      "addVelocity": "Lnet/minecraft/class_1297;method_60491(Lnet/minecraft/class_243;)V",
+      "isGlowing": "Lnet/minecraft/class_1297;method_5851()Z"
+    },
+    "com/acs/mixin/ExplosionS2CPacketAccessor": {
+      "playerVelocityX": "field_12176:F",
+      "playerVelocityY": "field_12183:F",
+      "playerVelocityZ": "field_12182:F"
     },
     "com/acs/mixin/InGameHudMixin": {
       "render": "Lnet/minecraft/class_329;method_1753(Lnet/minecraft/class_332;Lnet/minecraft/class_9779;)V"
@@ -13,8 +36,17 @@
     "com/acs/mixin/KeyboardMixin": {
       "onKey": "Lnet/minecraft/class_309;method_1466(JIIII)V"
     },
+    "com/acs/mixin/LivingEntityMixin": {
+      "travel": "Lnet/minecraft/class_1309;method_6091(Lnet/minecraft/class_243;)V"
+    },
     "com/acs/mixin/MinecraftClientMixin": {
       "tick": "Lnet/minecraft/class_310;method_1574()V"
+    },
+    "com/acs/mixin/PlayerMoveC2SPacketAccessor": {
+      "onGround": "field_29179:Z"
+    },
+    "com/acs/mixin/SimpleOptionAccessor": {
+      "value": "field_37868:Ljava/lang/Object;"
     },
     "com/acs/mixin/TitleScreenMixin": {
       "init": "Lnet/minecraft/class_442;method_25426()V"
@@ -22,12 +54,35 @@
   },
   "data": {
     "named:intermediary": {
+      "com/acs/mixin/AbstractBlockMixin": {
+        "getAmbientOcclusionLightLevel": "Lnet/minecraft/class_4970;method_9575(Lnet/minecraft/class_2680;Lnet/minecraft/class_1922;Lnet/minecraft/class_2338;)F"
+      },
+      "com/acs/mixin/BlockMixin": {
+        "shouldDrawSide": "Lnet/minecraft/class_2248;method_9607(Lnet/minecraft/class_2680;Lnet/minecraft/class_1922;Lnet/minecraft/class_2338;Lnet/minecraft/class_2350;Lnet/minecraft/class_2338;)Z"
+      },
+      "com/acs/mixin/ChatScreenMixin": {
+        "keyPressed": "Lnet/minecraft/class_408;method_25404(III)Z"
+      },
+      "com/acs/mixin/ClientConnectionMixin": {
+        "send(Lnet/minecraft/network/packet/Packet;)V": "Lnet/minecraft/class_2535;method_10743(Lnet/minecraft/class_2596;)V"
+      },
       "com/acs/mixin/ClientPlayNetworkHandlerMixin": {
         "onEntityVelocityUpdate": "Lnet/minecraft/class_634;method_11132(Lnet/minecraft/class_2743;)V",
-        "onExplosion": "Lnet/minecraft/class_634;method_11124(Lnet/minecraft/class_2664;)V"
+        "onExplosion": "Lnet/minecraft/class_634;method_11124(Lnet/minecraft/class_2664;)V",
+        "onPlaySound": "Lnet/minecraft/class_634;method_11146(Lnet/minecraft/class_2767;)V",
+        "onWorldEvent": "Lnet/minecraft/class_634;method_11098(Lnet/minecraft/class_2673;)V"
       },
       "com/acs/mixin/ClientPlayerInteractionManagerMixin": {
         "attackEntity": "Lnet/minecraft/class_636;method_2918(Lnet/minecraft/class_1657;Lnet/minecraft/class_1297;)V"
+      },
+      "com/acs/mixin/EntityMixin": {
+        "addVelocity": "Lnet/minecraft/class_1297;method_60491(Lnet/minecraft/class_243;)V",
+        "isGlowing": "Lnet/minecraft/class_1297;method_5851()Z"
+      },
+      "com/acs/mixin/ExplosionS2CPacketAccessor": {
+        "playerVelocityX": "field_12176:F",
+        "playerVelocityY": "field_12183:F",
+        "playerVelocityZ": "field_12182:F"
       },
       "com/acs/mixin/InGameHudMixin": {
         "render": "Lnet/minecraft/class_329;method_1753(Lnet/minecraft/class_332;Lnet/minecraft/class_9779;)V"
@@ -35,8 +90,17 @@
       "com/acs/mixin/KeyboardMixin": {
         "onKey": "Lnet/minecraft/class_309;method_1466(JIIII)V"
       },
+      "com/acs/mixin/LivingEntityMixin": {
+        "travel": "Lnet/minecraft/class_1309;method_6091(Lnet/minecraft/class_243;)V"
+      },
       "com/acs/mixin/MinecraftClientMixin": {
         "tick": "Lnet/minecraft/class_310;method_1574()V"
+      },
+      "com/acs/mixin/PlayerMoveC2SPacketAccessor": {
+        "onGround": "field_29179:Z"
+      },
+      "com/acs/mixin/SimpleOptionAccessor": {
+        "value": "field_37868:Ljava/lang/Object;"
       },
       "com/acs/mixin/TitleScreenMixin": {
         "init": "Lnet/minecraft/class_442;method_25426()V"

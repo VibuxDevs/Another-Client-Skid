@@ -8,11 +8,8 @@ public enum Category {
     EXPLOITS("Exploits"),
     MISC("Misc"),
     WORLD("World"),
-<<<<<<< Updated upstream
-    CLIENT("Client");
-=======
+    CLIENT("Client"),
     CRASH("Crash");
->>>>>>> Stashed changes
 
     private final String name;
 
