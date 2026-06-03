@@ -8,21 +8,9 @@
     "MinecraftClientMixin",
     "KeyboardMixin",
     "InGameHudMixin",
-<<<<<<< Updated upstream
-    "EntityMixin",
-    "AbstractBlockMixin",
-    "BlockMixin",
-    "ClientConnectionMixin",
-    "ClientPlayNetworkHandlerMixin",
-    "PlayerMoveC2SPacketAccessor",
-    "ExplosionS2CPacketAccessor",
-    "LivingEntityMixin",
-    "SimpleOptionAccessor"
-=======
     "ClientPlayNetworkHandlerMixin",
     "ClientPlayerInteractionManagerMixin",
     "TitleScreenMixin"
->>>>>>> Stashed changes
   ],
   "injectors": {
     "defaultRequire": 1

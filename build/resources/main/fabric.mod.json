@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "id": "acs-client",
+  "version": "1.0.0-beta",
+  "name": "ACS Client Beta",
+  "description": "ACS Client Beta. Use with Caution, In Development!",
+  "contributors": [ "CivicVox","IDrinkPlastic_97"],
+  "license": "Unlicense",
+  "icon": "icon.ico",
+  "environment": "client",
+  "entrypoints": {
+    "client": ["com.acs.Main"]
+  },
+  "mixins": [
+    "acs.mixins.json"
+  ]
+}

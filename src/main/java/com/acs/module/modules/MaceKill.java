@@ -1,0 +1,14 @@
+package com.acs.module.modules;
+
+import com.acs.module.Category;
+import com.acs.module.Module;
+import com.acs.settings.NumberSetting;
+
+public class MaceKill extends Module {
+    private final NumberSetting height = new NumberSetting("Height", 20.0, 5.0, 100.0, 5.0);
+
+    public MaceKill() {
+        super("MaceKill", "Spoofs fall distance when attacking with a Mace for massive damage", Category.EXPLOITS);
+        addSetting(height);
+    }
+}
