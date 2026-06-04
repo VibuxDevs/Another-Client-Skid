@@ -43,6 +43,9 @@ public class ModuleManager {
         addModule(new com.acs.module.modules.exploits.MaceBot());
         addModule(new com.acs.module.modules.movement.BoatFly());
         addModule(new com.acs.module.modules.exploits.BoatPhase());
+        addModule(new com.acs.module.modules.exploits.Randar());
+        addModule(new com.acs.module.modules.exploits.Nocom());
+        addModule(new com.acs.module.modules.player.Spammer());
     }
 
     private void addModule(Module module) {

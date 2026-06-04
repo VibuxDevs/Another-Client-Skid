@@ -3,6 +3,7 @@ package com.acs.command;
 import com.acs.config.ConfigManager;
 import com.acs.module.Module;
 import com.acs.module.ModuleManager;
+import com.acs.settings.Setting;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.text.Text;
 
@@ -24,6 +25,7 @@ public class CommandManager {
             case "config", "cfg" -> handleConfig(args);
             case "toggle", "t"   -> handleToggle(args);
             case "bind", "b"     -> handleBind(args);
+            case "set"           -> handleSet(args);
             case "tp"            -> handleTp(args);
             case "help", "h"     -> handleHelp();
             default -> chat("§cUnknown command. Use §f.help");
@@ -114,6 +116,7 @@ public class CommandManager {
         chat("§f.config <save|load|list> [name] §7- Manage configs");
         chat("§f.toggle <module> §7- Toggle a module");
         chat("§f.bind <module> <key|none> §7- Set a keybind");
+        chat("§f.set <module> <setting> <value> §7- Set module setting value");
         chat("§f.tp <x> <y> <z> §7- Teleport to coordinates (relative ~ supported)");
         chat("§f.help §7- Show this message");
     }
@@ -163,6 +166,51 @@ public class CommandManager {
             case "LEFT_ALT"    -> org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_ALT;
             default -> -1;
         };
+    }
+
+    private void handleSet(String[] args) {
+        if (args.length < 3) {
+            chat("§cUsage: .set <module> <setting> <value>");
+            return;
+        }
+        String modName = args[0];
+        String settingName = args[1];
+        String valueStr = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
+
+        Module m = ModuleManager.INSTANCE.getModuleByName(modName);
+        if (m == null) {
+            chat("§cModule not found: §f" + modName);
+            return;
+        }
+
+        Setting<?> setting = m.getSettings().stream()
+                .filter(s -> s.getName().equalsIgnoreCase(settingName))
+                .findFirst().orElse(null);
+
+        if (setting == null) {
+            chat("§cSetting not found: §f" + settingName);
+            return;
+        }
+
+        try {
+            if (setting instanceof com.acs.settings.BooleanSetting bs) {
+                bs.setValue(Boolean.parseBoolean(valueStr));
+            } else if (setting instanceof com.acs.settings.NumberSetting ns) {
+                ns.setValue(Double.parseDouble(valueStr));
+            } else if (setting instanceof com.acs.settings.ModeSetting ms) {
+                if (ms.getModes().contains(valueStr)) {
+                    ms.setValue(valueStr);
+                } else {
+                    chat("§cInvalid mode. Available: §f" + String.join(", ", ms.getModes()));
+                    return;
+                }
+            } else if (setting instanceof com.acs.settings.StringSetting ss) {
+                ss.setValue(valueStr);
+            }
+            chat(String.format("§aSet §f%s §7(§f%s§7) to §f%s", setting.getName(), m.getName(), valueStr));
+        } catch (Exception e) {
+            chat("§cFailed to parse/set value: §f" + valueStr);
+        }
     }
 
     private void chat(String msg) {

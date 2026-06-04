@@ -6,6 +6,8 @@ import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
+import net.minecraft.network.packet.s2c.play.EntitySpawnS2CPacket;
+import net.minecraft.network.packet.s2c.play.BlockUpdateS2CPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -69,6 +71,22 @@ public class ClientPlayNetworkHandlerMixin {
         com.acs.module.modules.exploits.CoordLogger coordLogger = (com.acs.module.modules.exploits.CoordLogger) ModuleManager.INSTANCE.getModuleByName("CoordLogger");
         if (coordLogger != null) {
             coordLogger.handleWorldEvent(packet.getEventId(), packet.getPos());
+        }
+    }
+
+    @Inject(method = "onEntitySpawn", at = @At("HEAD"))
+    public void onEntitySpawn(EntitySpawnS2CPacket packet, CallbackInfo ci) {
+        com.acs.module.modules.exploits.Randar randar = (com.acs.module.modules.exploits.Randar) ModuleManager.INSTANCE.getModuleByName("Randar");
+        if (randar != null) {
+            randar.handleEntitySpawn(packet);
+        }
+    }
+
+    @Inject(method = "onBlockUpdate", at = @At("HEAD"))
+    public void onBlockUpdate(BlockUpdateS2CPacket packet, CallbackInfo ci) {
+        com.acs.module.modules.exploits.Nocom nocom = (com.acs.module.modules.exploits.Nocom) ModuleManager.INSTANCE.getModuleByName("Nocom");
+        if (nocom != null) {
+            nocom.handleBlockUpdate(packet);
         }
     }
 }
